@@ -15,35 +15,39 @@ def main():
 	#define variables
 	odds = numInput("Welcome to Guess The Number! The computer will pick a number between 1 and: ")
 	randNum = random.randint(1, odds)
-	userNum = numInput("Now pick your number between 1 and {}!".format(odds))
+	userNum = numInput("Start by guessing a number in between 1 and {}: ".format(odds))
 	tries = 1
 	
 	#main game
 	while randNum != userNum:
 		if userNum > randNum:
-			userNum = numInput("Too high! Enter another number: ")
+			userNum = numInput("{} is too high! Enter another number: ".format(userNum))
 		elif userNum < randNum:
-			userNum = numInput("Too low! Enter another number:  ")
+			userNum = numInput("{} is too low! Enter another number: ".format(userNum))
 		tries += 1
 	
 	#win condition
 	print("YOU WIN! It took you {} tries to guess the number!".format(tries))
-	name = input("Enter your name for the leaderboard: ")
+	while True:
+		name = input("Enter your name for the leaderboard: ")
+		if name.strip() == '':
+			print("Enter a name.")
+		else:
+			break
+	
 	
 	#update highscore list
-	with open('guessthenumber_highscores.txt', 'a') as highscore:
-		highscore.write('{} guessed the number {} in {} tries with the odds of {}!\n'.format(name, randNum, tries, odds))
+	with open('guessthenumber_highscores.txt', 'r+') as highscore:
+		highscore.write('{} guessed the number {} in {} tries with the odds of {}\n'.format(name, randNum, tries, odds))
 		print('Recorded!')
 	
 	#check/clear highscore list
 	while True:
 		yn = input('Would you like to see the highscores? (y/n)')
 		if yn == 'y':
-			print('\n')
-			with open('guessthenumber_highscores.txt', 'r') as highscore:
+			with open('guessthenumber_highscores.txt', 'r+') as highscore:
 				for line in highscore:
 					print(line)
-			print('\n')
 			clear = input('Would you like to clear highscores? If yes, type "clear". If no, press enter.')
 			if clear == 'clear':
 				clear2 = input('Are you sure? This cannot be undone! Type "clear" if yes, press enter if no.')
